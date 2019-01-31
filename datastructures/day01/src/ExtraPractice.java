@@ -14,9 +14,7 @@ public class ExtraPractice {
             for(int j = 0; j < array.length; j++) {
                 if(array[i] == array[j]) { numEqual++; }
                 else if (array[i] > array[j]) { numLess++; }
-                if(numLess + numEqual/2 == target) {
-                    return array[i];
-                }
+                if(numLess + numEqual/2 == target) { return array[i]; }
             }
         }
         return -1;
