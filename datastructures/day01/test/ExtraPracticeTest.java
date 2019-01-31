@@ -40,5 +40,7 @@ public class ExtraPracticeTest {
     public void testProblemFour() {
         int[] array = {1,2,3,2,3,4,5,6,1,2,1,2,1,1};
         assertArrayEquals(new int[] {3,7},ex.problemFour(array));
+        int[] array1 = {1,2,3};
+        assertArrayEquals(new int[] {0,2},ex.problemFour(array1));
     }
 }

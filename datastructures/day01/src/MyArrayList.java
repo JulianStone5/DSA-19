@@ -57,6 +57,7 @@ public class MyArrayList {
             System.arraycopy(elems,0,temp,0,size);
             elems = temp;
         }
+        if(index > size) { throw new IndexOutOfBoundsException();}
         for(int i = size-1; i > index-1; i--) {
             elems[i+1] = elems[i];
         }
