@@ -37,6 +37,7 @@ public class MyArrayList {
 
     // TODO: Runtime: O(N)
     public Cow remove(int index) {
+        if(index >= size) { throw new IndexOutOfBoundsException(); }
         Cow removed = elems[index];
         for(int i = index+1; i < size; i++) {
             elems[i-1] = elems[i];
@@ -52,12 +53,12 @@ public class MyArrayList {
 
     // TODO: Runtime: O(N)
     public void add(int index, Cow c) {
+        if(index > size) { throw new IndexOutOfBoundsException(); }
         if(size == elems.length) {
-            Cow[] temp = new Cow[elems.length*2];
-            System.arraycopy(elems,0,temp,0,size);
+            Cow[] temp = new Cow[elems.length * 2];
+            System.arraycopy(elems, 0, temp, 0, size);
             elems = temp;
         }
-        if(index > size) { throw new IndexOutOfBoundsException();}
         for(int i = size-1; i > index-1; i--) {
             elems[i+1] = elems[i];
         }
