@@ -14,7 +14,7 @@ public class MyArrayList {
         size = 0;
     }
 
-    // TODO: Runtime: O(N)
+    // TODO: Runtime: O(1)
     public void add(Cow c) {
         if(size == elems.length) {
             Cow[] temp = new Cow[elems.length*2];
