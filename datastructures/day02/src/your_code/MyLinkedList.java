@@ -25,7 +25,9 @@ public class MyLinkedList {
     }
 
     public MyLinkedList() {
-        // TODO
+        head = null;
+        tail = null;
+        size = 0;
     }
 
     public int size() {
@@ -45,30 +47,83 @@ public class MyLinkedList {
     }
 
     public void addLast(Chicken c) {
-        // TODO
+        Node nn = new Node(c);
+        if(head == null) {
+            head = nn;
+        }
+        if(tail != null) {
+            tail.next = nn;
+            nn.prev = tail;
+        }
+        tail = nn;
+        size++;
     }
 
     public void addFirst(Chicken c) {
-        // TODO
+        Node nn = new Node(c);
+        if(tail == null) {
+            tail = nn;
+        }
+        if(head != null) {
+            head.prev = nn;
+            nn.next = head;
+        }
+        head = nn;
+        size++;
     }
 
     public Chicken get(int index) {
-        // TODO
-        return null;
+        if(index >= size) {throw new IndexOutOfBoundsException();}
+        int counter = 0;
+        Node current = head;
+        while(counter < index) {
+            current = current.next;
+            counter++;
+        }
+        return current.val;
     }
 
     public Chicken remove(int index) {
-        // TODO
-        return null;
+        if(index >= size) {throw new IndexOutOfBoundsException();}
+        int counter = 0;
+        Node current = head;
+        while(counter < index) {
+            current = current.next;
+            counter++;
+        }
+        if(current.prev != null) {
+            current.prev.next = current.next;
+        }
+        if(current.next != null) {
+            current.next.prev = current.prev;
+        }
+        size--;
+        return current.val;
     }
 
     public Chicken removeFirst() {
-        // TODO
+        if(head != null) {
+            Chicken c = head.val;
+            head = head.next;
+            if(head != null) {
+                head.prev = null;
+            }
+            size--;
+            return c;
+        }
         return null;
     }
 
     public Chicken removeLast() {
-        // TODO
+        if(tail != null) {
+            Chicken c = tail.val;
+            tail = tail.prev;
+            if(tail != null) {
+                tail.next = null;
+            }
+            size--;
+            return c;
+        }
         return null;
     }
 }

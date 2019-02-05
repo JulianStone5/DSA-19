@@ -9,19 +9,27 @@ import java.util.LinkedList;
 public class MyStack implements StackADT<Integer> {
 
     private LinkedList<Integer> ll;
+    private LinkedList<Integer> maxElements;
 
     public MyStack() {
         ll = new LinkedList<>();
+        maxElements = new LinkedList<>();
     }
 
     @Override
     public void push(Integer e) {
+        if(maxElements.size() == 0 || maxElements.peek() < e) {
+            maxElements.addFirst(e);
+        }
         ll.addFirst(e);
     }
 
     @Override
     public Integer pop() {
         Integer pop = ll.removeFirst();
+        if(maxElements.peek() == pop) {
+            maxElements.pop();
+        }
         return pop;
     }
 
@@ -36,7 +44,6 @@ public class MyStack implements StackADT<Integer> {
     }
 
     public Integer maxElement() {
-        // TODO
-        return 0;
+        return maxElements.peek();
     }
 }
