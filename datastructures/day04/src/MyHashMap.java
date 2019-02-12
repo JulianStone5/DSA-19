@@ -86,7 +86,7 @@ public class MyHashMap<K, V> implements Map<K, V> {
     public boolean containsValue(Object value) {
         for(int i = 0; i < buckets.length; i++) {
             for(int j = 0; j < buckets[i].size(); j++) {
-                if(value == buckets[i].get(j).getValue()) {
+                if (value == buckets[i].get(j).getValue()) {
                     return true;
                 }
             }
