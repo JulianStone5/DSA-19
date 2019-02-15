@@ -1,5 +1,6 @@
+import java.util.Arrays;
 
-public class MergeSort extends SortAlgorithm {
+public class    MergeSort extends SortAlgorithm {
 
     private static final int INSERTION_THRESHOLD = 10;
 
@@ -9,16 +10,18 @@ public class MergeSort extends SortAlgorithm {
      * Use Insertion Sort if the length of the array is <= INSERTION_THRESHOLD
      *
      * TODO
-     * Best-case runtime:
-     * Worst-case runtime:
-     * Average-case runtime:
+     * Best-case runtime: O(N log N)
+     * Worst-case runtime: O(N log N)
+     * Average-case runtime: O(N log N)
      *
-     * Space-complexity:
+     * Space-complexity: O(N)
      */
     @Override
     public int[] sort(int[] array) {
-        // TODO
-        return new int[0];
+        if(array.length <= 1) return array;
+        int[] left = sort(Arrays.copyOfRange(array, 0, array.length/2));
+        int[] right = sort(Arrays.copyOfRange(array,array.length/2, array.length));
+        return merge(left,right);
     }
 
     /**
@@ -26,8 +29,19 @@ public class MergeSort extends SortAlgorithm {
      * all elements in a and b. A test for this method is provided in `SortTest.java`
      */
     public int[] merge(int[] a, int[] b) {
-        // TODO
-        return new int[0];
+        int i = 0;
+        int j = 0;
+        int[] merged = new int[a.length + b.length];
+        while(i < a.length || j < b.length) {
+            if(i >= a.length || (j<b.length && a[i] > b[j])) {
+                merged[i+j] = b[j];
+                j++;
+            } else {
+                merged[i+j] = a[i];
+                i++;
+            }
+        }
+        return merged;
     }
 
 }
