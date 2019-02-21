@@ -74,6 +74,13 @@ public class HeapSortTest {
     private int[] sort(int[] array) {
         int[] copy = Arrays.copyOf(array, array.length);
         Arrays.sort(copy);
+        if(copy.length == 2) {
+            System.out.println("copy");
+            for (int i = 0; i < copy.length; i++) {
+                System.out.println(copy[i]);
+            }
+            System.out.println("");
+        }
         return copy;
     }
 
