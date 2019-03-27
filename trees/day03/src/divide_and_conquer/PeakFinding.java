@@ -1,5 +1,7 @@
 package divide_and_conquer;
 
+import java.util.Arrays;
+
 public class PeakFinding {
 
     // Return -1 if left is higher, 1 if right is higher, 0 if peak
@@ -51,13 +53,31 @@ public class PeakFinding {
 
 
     public static int findOneDPeak(int[] nums) {
-        // TODO
-        return 0;
+        if(nums.length == 1) { return 0; }
+        if(peakOneD(nums.length-1,nums) == 0) { return nums.length-1; }
+        if(peakOneD(0,nums) == 0) { return 0; }
+        int mid = nums.length/2;
+        if(peakOneD(mid,nums) == 0){
+            return mid;
+        } else if(peakOneD(mid,nums) < 0){
+            int[] temp = Arrays.copyOfRange(nums,0,mid);
+            return findOneDPeak(temp);
+        } else {
+            int[] temp = Arrays.copyOfRange(nums,mid,nums.length);
+            return findOneDPeak(temp);
+        }
     }
 
     public static int[] findTwoDPeak(int[][] nums) {
-        // TODO
-        return null;
+        int[] result = new int[2];
+        int mid = nums.length/2;
+        if(peakX(nums[0].length-1,nums.length-1,nums) == 0 && peakY(nums[0].length-1,nums.length-1,nums) == 0) {
+            return new int[] {nums.length-1,nums[0].length-1};
+        }
+        if(mid == 0 || mid == nums.length-1) {
+            return new int[] {mid,maxXIndex(mid,0,nums[0].length-1,nums)};
+        }
+        return new int[] {mid, findOneDPeak(nums[mid])};
     }
 
 }
