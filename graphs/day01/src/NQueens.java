@@ -37,6 +37,17 @@ public class NQueens {
         return false;
     }
 
+    private static boolean checkColumn(char[][] board, int row, int col) {
+        for(int i = 0; i < row; i++) {
+            if(board[i][col] == 'Q') { return false; }
+        }
+        return true;
+    }
+
+    private static boolean checkAll(char[][] board, int row, int col) {
+        return !checkDiagonal(board,row,col) && checkColumn(board, row, col);
+    }
+
 
     /**
      * Creates a deep copy of the input array and returns it
@@ -50,9 +61,30 @@ public class NQueens {
 
 
     public static List<char[][]> nQueensSolutions(int n) {
-        // TODO
+        char[][] board = new char[n][n];
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                board[i][j] = '.';
+            }
+        }
         List<char[][]> answers = new ArrayList<>();
+        recSol(board, 0, answers);
         return answers;
+    }
+
+    private static void recSol(char[][] board, int row, List<char[][]> answers) {
+        char[][] b = copyOf(board);
+        if(row >= b.length) {
+            answers.add(b);
+            return;
+        }
+        for(int i = 0; i < b.length; i++) {
+            if(checkAll(b, row, i)) {
+                b[row][i] = 'Q';
+                recSol(b, row+1,answers);
+                b[row][i] = '.';
+            }
+        }
     }
 
 }
