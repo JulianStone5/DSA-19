@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,13 +12,14 @@ public class Board {
 
     //TODO
     // Create a 2D array representing the solved board state
-    private int[][] goal = {{}};
+    private int[][] goal = {{1,2,3},{4,5,6},{7,8,0}};
 
     /*
      * Set the global board size and tile state
      */
     public Board(int[][] b) {
-        // TODO: Your code here
+        tiles = b;
+        n = b.length;
     }
 
     /*
@@ -25,24 +27,35 @@ public class Board {
      (equal to 3 for 8 puzzle, 4 for 15 puzzle, 5 for 24 puzzle, etc)
      */
     private int size() {
-        // TODO: Your code here
-        return 0;
+        return n;
     }
 
     /*
      * Sum of the manhattan distances between the tiles and the goal
      */
     public int manhattan() {
-        // TODO: Your code here
-        return 0;
+        int sum = 0;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                int val = tiles[i][j];
+                if(val != 0) {
+                    int tarI = (val-1) / n;
+                    int tarJ = (val-1) % n;
+                    int di = Math.abs(i-tarI);
+                    int dj = Math.abs(j-tarJ);
+                    sum += di + dj;
+                }
+            }
+        }
+        return sum;
     }
 
     /*
      * Compare the current state to the goal state
      */
     public boolean isGoal() {
-        // TODO: Your code here
-        return false;
+        return equals(goal);
+        //return true;
     }
 
     /*
@@ -50,8 +63,23 @@ public class Board {
      * Research how to check this without exploring all states
      */
     public boolean solvable() {
-        // TODO: Your code here
-        return false;
+        int inversions = 0;
+        for(int i = 0; i < n*n; i++) {
+            int iy = i / n;
+            int ix = i % n;
+            int ival = tiles[iy][ix];
+            if(ival != 0) {
+                for(int j = i+1; j < n*n; j++) {
+                    int jy = j / n;
+                    int jx = j % n;
+                    int jval = tiles[jy][jx];
+                    if(jval != 0 && jval > ival) {
+                        inversions++;
+                    }
+                }
+            }
+        }
+        return (inversions % 2 == 1);
     }
 
     /*
