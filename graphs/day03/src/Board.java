@@ -1,6 +1,5 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.util.*;
 
 /**
  * Board definition for the 8 Puzzle challenge
@@ -55,7 +54,6 @@ public class Board {
      */
     public boolean isGoal() {
         return equals(goal);
-        //return true;
     }
 
     /*
@@ -79,15 +77,62 @@ public class Board {
                 }
             }
         }
-        return (inversions % 2 == 1);
+        return (inversions % 2 == 0);
+    }
+
+    private int[] findEmpty() {
+        int[] pos = new int[2];
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++) {
+                if(tiles[i][j] == 0) {
+                    pos[0] = i;
+                    pos[1] = j;
+                    return pos;
+                }
+            }
+        }
+        return pos;
+    }
+
+    private int[][] copyOf(int[][] array) {
+        int[][] temp = new int[array.length][array[0].length];
+        for(int i = 0; i < temp.length; i++) {
+            temp[i] = Arrays.copyOf(array[i],array[i].length);
+        }
+        return temp;
     }
 
     /*
      * Return all neighboring boards in the state tree
      */
     public Iterable<Board> neighbors() {
-        // TODO: Your code here
-        return null;
+        List<Board> neighbors = new ArrayList<>();
+        int[] pos = findEmpty();
+        if(pos[0] > 0) {
+            int[][] t = copyOf(tiles);
+            t[pos[0]][pos[1]] = t[pos[0]-1][pos[1]];
+            t[pos[0]-1][pos[1]] = 0;
+            neighbors.add(new Board(t));
+        }
+        if(pos[0] < n-1) {
+            int[][] t = copyOf(tiles);
+            t[pos[0]][pos[1]] = t[pos[0]+1][pos[1]];
+            t[pos[0]+1][pos[1]] = 0;
+            neighbors.add(new Board(t));
+        }
+        if(pos[1] > 0) {
+            int[][] t = copyOf(tiles);
+            t[pos[0]][pos[1]] = t[pos[0]][pos[1]-1];
+            t[pos[0]][pos[1]-1] = 0;
+            neighbors.add(new Board(t));
+        }
+        if(pos[1] < n-1) {
+            int[][] t = copyOf(tiles);
+            t[pos[0]][pos[1]] = t[pos[0]][pos[1]+1];
+            t[pos[0]][pos[1]+1] = 0;
+            neighbors.add(new Board(t));
+        }
+        return neighbors;
     }
 
     /*
