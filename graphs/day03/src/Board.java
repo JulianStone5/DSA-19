@@ -53,7 +53,7 @@ public class Board {
      * Compare the current state to the goal state
      */
     public boolean isGoal() {
-        return equals(goal);
+        return manhattan() == 0;
     }
 
     /*
@@ -132,6 +132,15 @@ public class Board {
             t[pos[0]][pos[1]+1] = 0;
             neighbors.add(new Board(t));
         }
+//        for(int k = 0; k < 4; k++) {
+//            for (int i = 0; i < n; i++) {
+//                for (int j = 0; j < n; j++) {
+//                    System.out.print(neighbors.get(k).tiles[i][j] + " ");
+//                }
+//                System.out.println("");
+//            }
+//            System.out.println("");
+//        }
         return neighbors;
     }
 

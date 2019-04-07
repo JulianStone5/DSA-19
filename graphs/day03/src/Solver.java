@@ -60,27 +60,28 @@ public class Solver {
      * and a identify the shortest path to the the goal state
      */
     public Solver(Board initial) {
-
-
         solutionState = new State(initial,0,null);
 
-        HashMap<State, State> visited = new HashMap<>();
-        visited.put(solutionState,solutionState);
+        HashSet<State> visited = new HashSet<>();
+        visited.add(solutionState);
         PriorityQueue<State> queue = new PriorityQueue<>(10);
         queue.add(solutionState);
 
         if(!isSolvable()) { return; }
+
         while(!queue.isEmpty()) {
-            State current = queue.poll();
+            State current = queue.remove();
             if(current.board.isGoal()) {
                 solutionState = current;
+                minMoves = solutionState.moves;
+                solved = true;
                 return;
             }
             Iterable<Board> neighbors = current.board.neighbors();
             for(Board b : neighbors) {
                 State s = new State(b,current.moves+1,current);
-                if(visited.getOrDefault(s,null) == null) {
-                    visited.put(s,s);
+                if(!visited.contains(s)) {
+                    visited.add(s);
                     queue.add(s);
                 }
             }
@@ -100,7 +101,13 @@ public class Solver {
      */
     public Iterable<Board> solution() {
         if(!isSolvable()) { return null; }
-        return null;
+        List<Board> sol = new ArrayList<>();
+        State current = solutionState;
+        while(current.prev != null) {
+            current = current.prev;
+            sol.add(current.board);
+        }
+        return sol;
     }
 
     public State find(Iterable<State> iter, Board b) {
