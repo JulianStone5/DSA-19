@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 // this is our implementation of a rubiks cube. It is your job to use A* or some other search algorithm to write a
 // solve() function
-public class RubiksCube {
+public class RubiksCube{
 
     private BitSet cube;
 
@@ -187,11 +187,97 @@ public class RubiksCube {
         return listTurns;
     }
 
+    private class State implements Comparable<State> {
+        // Each state needs to keep track of its cost and the previous state
+        private RubiksCube cube;
+        private int moves; // equal to g-cost in A*
+        public int cost; // equal to f-cost in A*
+        private State prev;
+
+        public State(RubiksCube cube, int moves, State prev) {
+            this.cube = cube;
+            this.moves = moves;
+            this.prev = prev;
+            cost = this.moves + cube.manhattan();
+        }
+
+        @Override
+        public boolean equals(Object s) {
+            if (s == this) return true;
+            if (s == null) return false;
+            if (!(s instanceof State)) return false;
+            return ((State) s).cube.equals(this.cube);
+        }
+
+
+        public int compareTo(State s) {
+            return this.cost - s.cost;
+        }
+    }
+
+    private int manhattan() {
+        int man = 0;
+        for(int i = 0; i < 24; i++) {
+            int tar = getColor(i);
+            int cur = i / 4;
+            if(Math.abs(tar-cur) == 3) { man += 2; }
+            else if(Math.abs(tar-cur) != 0) {man++;}
+        }
+        return man/8;
+    }
+
+    private Iterable<RubiksCube> neighbors() {
+        List<RubiksCube> neighbors = new ArrayList<>();
+        neighbors.add(rotate('r'));
+        neighbors.add(rotate('u'));
+        neighbors.add(rotate('f'));
+        neighbors.add(rotate('R'));
+        neighbors.add(rotate('U'));
+        neighbors.add(rotate('F'));
+        return neighbors;
+    }
 
     // return the list of rotations needed to solve a rubik's cube
     public List<Character> solve() {
-        // TODO
+        State current = new State(this,0,null);
+
+        HashSet<RubiksCube> visited = new HashSet<>();
+        visited.add(current.cube);
+        PriorityQueue<State> queue = new PriorityQueue<>(10);
+        queue.add(current);
+
+        while(!queue.isEmpty()) {
+            current = queue.remove();
+            if(current.cube.isSolved()) {
+                return makeMoveList(current);
+            }
+            Iterable<RubiksCube> neighbors = current.cube.neighbors();
+            for(RubiksCube r : neighbors) {
+                State temp = new State(r,current.moves+1,current);
+                if(!visited.contains(temp.cube)) {
+                    visited.add(temp.cube);
+                    queue.add(temp);
+                }
+            }
+        }
         return new ArrayList<>();
+    }
+
+    private List<Character> makeMoveList(State s) {
+        State current = s;
+        List<Character> ml = new ArrayList<>();
+        while(current.prev != null) {
+            RubiksCube last = current.prev.cube;
+            RubiksCube now = current.cube;
+            if(last.rotate('r').equals(now)) { ml.add(0,'r'); }
+            else if(last.rotate('u').equals(now)) { ml.add(0,'u'); }
+            else if(last.rotate('f').equals(now)) { ml.add(0,'f'); }
+            else if(last.rotate('R').equals(now)) { ml.add(0,'R'); }
+            else if(last.rotate('U').equals(now)) { ml.add(0,'U'); }
+            else if(last.rotate('F').equals(now)) { ml.add(0,'F'); }
+            current = current.prev;
+        }
+        return ml;
     }
 
 }
